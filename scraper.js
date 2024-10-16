@@ -84,7 +84,7 @@ const scrape = async ({ url, proxy = {}, recaptchaApiKey = null }) => {
 
     // Create a new page
     const page = await browser.newPage();
-
+    page.setJavaScriptEnabled(true);
     // Set proxy authentication if proxy credentials are provided
     if (proxy?.url && proxy?.user) {
       await page.authenticate({

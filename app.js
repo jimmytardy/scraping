@@ -19,6 +19,7 @@ const regexLinkSearch = /href="(\/pharmacies\/[^#"]+)"/g;
 const regexLinkDetail = /href="(\/pharmacie\/[^#"]+)"/g;
 const regexIsDetailPage = /^https?:\/\/[^\/]+\/pharmacie\/([^\/]+)\/([^\/]+)$/;
 const findLinkHref = (html) => {
+    const length = allLinks.length
   let match;
   while ((match = regexLinkDetail.exec(html)) !== null) {
     const newLink = baseUrl + match[1];
@@ -37,6 +38,7 @@ const findLinkHref = (html) => {
       linksQueues.push(newLink);
     }
   }
+  console.log('More ' + (allLinks.length - length) + ' new links')
 };
 
 const collectClientData = async (html, city, name, url) => {
