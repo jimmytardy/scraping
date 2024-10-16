@@ -11,7 +11,7 @@ fs.writeFileSync("errors.txt", "");
 fs.writeFileSync(verifyFileName, `Name,Mail,Téléphone,URL`);
 const baseUrl = "https://livmeds.com";
 
-const initialLink = "https://livmeds.com/pharmacies/paris";
+const initialLink = "https://livmeds.com/pharmacies";
 
 const allLinks = [initialLink, baseUrl];
 const linksQueues = [initialLink];
