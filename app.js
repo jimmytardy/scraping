@@ -4,11 +4,15 @@ const fs = require("fs");
 const dataFileName = "pharmacies.csv";
 const errorsFileName = "errors.txt";
 const verifyFileName = "errors-missing-mail-phone.csv";
+const cityFileName = "city-page.csv";
+const detailFileName = "detail-page.csv";
 
 // if (fs.existsSync(dataFileName)) process.exit();
 fs.writeFileSync(dataFileName, "Nom,Ville,Mail,Téléphone,Adresse,URL\n");
 fs.writeFileSync("errors.txt", "");
-fs.writeFileSync(verifyFileName, `Name,Mail,Téléphone,URL\n`);
+fs.writeFileSync("errors.txt", "");
+fs.writeFileSync(cityFileName, "URL\n");
+fs.writeFileSync(detailFileName, "URL\n");
 const baseUrl = "https://livmeds.com";
 
 const initialLink = "https://livmeds.com/pharmacies";
@@ -19,26 +23,26 @@ const regexLinkSearch = /href="(\/pharmacies\/[^#"]+)"/g;
 const regexLinkDetail = /href="(\/pharmacie\/[^#"]+)"/g;
 const regexIsDetailPage = /^https?:\/\/[^\/]+\/pharmacie\/([^\/]+)\/([^\/]+)$/;
 const findLinkHref = (html) => {
-    const length = allLinks.length
+  const length = allLinks.length;
   let match;
-  while ((match = regexLinkDetail.exec(html)) !== null) {
-    const newLink = baseUrl + match[1];
-    if (!allLinks.includes(newLink)) {
-      fs.appendFileSync("detail-page.txt", newLink + "\n");
-      allLinks.push(newLink);
-      linksQueues.push(newLink);
-    }
-  }
+  // while ((match = regexLinkDetail.exec(html)) !== null) {
+  //   const newLink = baseUrl + match[1];
+  //   if (!allLinks.includes(newLink)) {
+  //     fs.appendFileSync(detailFileName, `${newLink}\n`);
+  //     allLinks.push(newLink);
+  //     linksQueues.push(newLink);
+  //   }
+  // }
 
   while ((match = regexLinkSearch.exec(html)) !== null) {
     const newLink = baseUrl + match[1];
     if (!allLinks.includes(newLink)) {
-      fs.appendFileSync("city-page.txt", newLink + "\n");
+      fs.appendFileSync(cityFileName, `${newLink}\n`);
       allLinks.push(newLink);
       linksQueues.push(newLink);
     }
   }
-  console.log('More ' + (allLinks.length - length) + ' new links')
+  console.log("More " + (allLinks.length - length) + " new links");
 };
 
 const collectClientData = async (html, city, name, url) => {
@@ -70,9 +74,9 @@ const analyseUrl = async (url) => {
     const { html } = await scrape({ url });
     findLinkHref(html);
     let match;
-    if ((match = regexIsDetailPage.exec(url))) {
-      collectClientData(html, match[1].trim(), match[2].trim(), url.trim());
-    }
+    // if ((match = regexIsDetailPage.exec(url))) {
+    //   collectClientData(html, match[1].trim(), match[2].trim(), url.trim());
+    // }
   } catch (e) {
     fs.appendFileSync(errorsFileName, url + ": " + e.message + "\n");
   }
