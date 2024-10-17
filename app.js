@@ -8,7 +8,7 @@ const verifyFileName = "errors-missing-mail-phone.csv";
 // if (fs.existsSync(dataFileName)) process.exit();
 fs.writeFileSync(dataFileName, "Nom,Ville,Mail,Téléphone,Adresse,URL\n");
 fs.writeFileSync("errors.txt", "");
-fs.writeFileSync(verifyFileName, `Name,Mail,Téléphone,URL`);
+fs.writeFileSync(verifyFileName, `Name,Mail,Téléphone,URL\n`);
 const baseUrl = "https://livmeds.com";
 
 const initialLink = "https://livmeds.com/pharmacies";
@@ -58,17 +58,16 @@ const collectClientData = async (html, city, name, url) => {
     }
     fs.appendFileSync(
       dataFileName,
-      `${name.trim()},${city.trim()},${mail.trim()},${phone.trim()},${adress.trim()},${url.trim()}\n`
+      `${name.trim()},${city.trim()},${(mail || '').trim()},${(mail || '').trim()},${adress.trim()},${url.trim()}\n`
     );
   } else {
-    fs.appendFileSync(errorsFileName, `Adresse non trouvée${url}\n`);
+    fs.appendFileSync(errorsFileName, `Adresse non trouvée: ${url}\n`);
   }
 };
 
 const analyseUrl = async (url) => {
   try {
     const { html } = await scrape({ url });
-    console.log('start ' + url)
     findLinkHref(html);
     let match;
     if ((match = regexIsDetailPage.exec(url))) {
